@@ -1,11 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Plus, Trash2, Copy, Check, AlertCircle } from 'lucide-react';
 
 const SerializedArrayEditor = () => {
   // Separate input and output so input doesn't get auto-overwritten
   const [inputSerialized, setInputSerialized] = useState('');
-  const [outputSerialized, setOutputSerialized] = useState('');
   const [items, setItems] = useState([]);
+  // Compute output from items; avoid effect-driven state to prevent render loops
+  const outputSerialized = useMemo(() => {
+    if (!items || items.length === 0) return '';
+    return serializeArray(items);
+  }, [items]);
   const [error, setError] = useState('');
   const [copied, setCopied] = useState(false);
 
@@ -54,14 +58,7 @@ const SerializedArrayEditor = () => {
 
   // No initial parse; only parse when user types/pastes input
 
-  // Live update serialized output when items change
-  useEffect(() => {
-    if (items.length > 0) {
-      setOutputSerialized(serializeArray(items));
-    } else {
-      setOutputSerialized('');
-    }
-  }, [items]);
+  // Removed useEffect that set state based on items to avoid possible update loops
 
   const handleSerializedInput = (value) => {
     setInputSerialized(value);
