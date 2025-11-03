@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "bun --hot src/index.js",
+    "build": "bun build src/index.js --outdir=dist --minify --target=browser --external:./index.css",
     "start": "NODE_ENV=production bun src/index.js"
   },
   "dependencies": {
