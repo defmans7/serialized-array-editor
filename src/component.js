@@ -46,15 +46,15 @@ const SerializedArrayEditor = () => {
     }
   };
 
-  // Serialize array back to PHP format
-  const serializeArray = (arr) => {
+  // Serialize array back to PHP format (use function declaration for hoisting)
+  function serializeArray(arr) {
     let serialized = `a:${arr.length}:{`;
     arr.forEach((item, idx) => {
       serialized += `i:${idx};s:${item.value.length}:"${item.value}";`;
     });
     serialized += '}';
     return serialized;
-  };
+  }
 
   // No initial parse; only parse when user types/pastes input
 
