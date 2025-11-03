@@ -2,7 +2,6 @@
   "name": "dj3dw-html-editor",
   "version": "0.0.1",
   "private": true,
-  "type": "module",
   "scripts": {
     "dev": "bun --hot src/index.js",
     "start": "NODE_ENV=production bun src/index.js"
