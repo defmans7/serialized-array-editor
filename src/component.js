@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Plus, Trash2, Copy, Check, AlertCircle } from 'lucide-react';
 
 const SerializedArrayEditor = () => {
-  const [serialized, setSerialized] = useState('');
+  // Separate input and output so input doesn't get auto-overwritten
+  const [inputSerialized, setInputSerialized] = useState('');
+  const [outputSerialized, setOutputSerialized] = useState('');
   const [items, setItems] = useState([]);
   const [error, setError] = useState('');
   const [copied, setCopied] = useState(false);
@@ -50,28 +52,19 @@ const SerializedArrayEditor = () => {
     return serialized;
   };
 
-  // Initial parse
-  useEffect(() => {
-    if (serialized) {
-      try {
-        const parsed = parseSerializedArray(serialized);
-        setItems(parsed);
-        setError('');
-      } catch (e) {
-        setError(e.message);
-      }
-    }
-  }, []);
+  // No initial parse; only parse when user types/pastes input
 
   // Live update serialized output when items change
   useEffect(() => {
     if (items.length > 0) {
-      setSerialized(serializeArray(items));
+      setOutputSerialized(serializeArray(items));
+    } else {
+      setOutputSerialized('');
     }
   }, [items]);
 
   const handleSerializedInput = (value) => {
-    setSerialized(value);
+    setInputSerialized(value);
     if (value.trim()) {
       try {
         const parsed = parseSerializedArray(value);
@@ -104,7 +97,7 @@ const SerializedArrayEditor = () => {
   };
 
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(serialized);
+    navigator.clipboard.writeText(outputSerialized);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -129,7 +122,7 @@ const SerializedArrayEditor = () => {
                   </label>
                 </div>
                 <textarea
-                  value={serialized}
+                  value={inputSerialized}
                   onChange={(e) => handleSerializedInput(e.target.value)}
                   className="w-full h-48 p-3 border border-slate-300 rounded-lg font-mono text-sm shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200/60 transition resize-none"
                   placeholder="Paste your serialized array here..."
@@ -150,7 +143,7 @@ const SerializedArrayEditor = () => {
                   </label>
                   <button
                     onClick={copyToClipboard}
-                    disabled={!serialized.trim()}
+                    disabled={!outputSerialized.trim()}
                     className="flex items-center gap-2 px-3 py-1.5 text-sm bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {copied ? (
@@ -167,7 +160,7 @@ const SerializedArrayEditor = () => {
                   </button>
                 </div>
                 <textarea
-                  value={serialized}
+                  value={outputSerialized}
                   readOnly
                   className="w-full h-48 p-3 border border-slate-200 rounded-lg font-mono text-sm bg-slate-50 text-slate-700 resize-none"
                 />
