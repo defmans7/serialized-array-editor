@@ -14,10 +14,10 @@ COPY package.json bun.lock bunfig.toml ./
 # Install dependencies
 RUN bun install
 
-RUN bun run build
-
 # Copy the rest of the application code
 COPY . .
+
+RUN bun run build
 
 # Switch to bun user for security
 USER bun
