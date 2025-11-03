@@ -1,5 +1,4 @@
 import { serve } from "bun";
-import tailwind from "bun-plugin-tailwind";
 import index from "./index.html";
 
 const server = serve({
