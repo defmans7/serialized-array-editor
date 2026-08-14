@@ -1,5 +1,5 @@
 # Use official Bun image
-FROM oven/bun:1.2
+FROM oven/bun:1.3.8
 
 # Install curl for health checks
 USER root
